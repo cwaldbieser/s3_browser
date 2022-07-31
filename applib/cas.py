@@ -72,7 +72,7 @@ def authenticate():
     map_attributes(attributes)
     logger.debug("CAS authentication successful for '{}'.".format(user))
     session["username"] = user
-    return redirect(url_for("/browse"))
+    return redirect(url_for("/browse", subpath="top"))
 
 
 def make_service_url():

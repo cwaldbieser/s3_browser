@@ -2,6 +2,48 @@
 {% block content %}
             <h1>Browsing S3 Bucket</h1>
             <div>
-                Some content goes here.
+                <div>Path: {{ subpath }}</div>
+                <div>
+                    <h4>Folders</h4>
+                    <table class="table table-striped table-dark">
+                      <thead>
+                        <tr>
+                          <th scope="col">Name</th>
+                          <th scope="col">Size</th>
+                          <th scope="col">Last Modified</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for item in bucket_objects.folders %}
+                        <tr>
+                          <td>{{ item.key }}</td>
+                          <td>{{ item.size }}</td>
+                          <td>{{ item.last_modified }}</td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+                <div>
+                    <h4>Files</h4>
+                    <table class="table table-striped table-dark">
+                      <thead>
+                        <tr>
+                          <th scope="col">Name</th>
+                          <th scope="col">Size</th>
+                          <th scope="col">Last Modified</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for item in bucket_objects.files %}
+                        <tr>
+                          <td>{{ item.key }}</td>
+                          <td>{{ item.size }}</td>
+                          <td>{{ item.last_modified }}</td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
             </div>
 {% endblock %}
