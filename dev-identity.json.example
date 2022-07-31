@@ -1,0 +1,13 @@
+{
+    "sub": "developer",
+    "family_name": "Programmer",
+    "given_name": "Anonymous",
+    "permissions": {
+        "list_files": true,
+        "create_folder": true,
+        "remove_folder": true,
+        "download_file": true,
+        "upload_file": true,
+        "remove_file": true
+    }
+}

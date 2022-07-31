@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+zappa = "*"
+boto3 = "*"
+flask = "*"
+flask-wtf = "*"
+flask-talisman = "*"
+logzero = "*"
+lxml = "*"
+requests = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"

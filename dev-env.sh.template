@@ -1,0 +1,5 @@
+#! /bin/bash
+
+export CAS_LOGIN_URL="CAS SSO logout URL."
+export CAS_SERVICE_URL="Application /login URL."
+
