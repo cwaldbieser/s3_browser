@@ -10,7 +10,7 @@ from applib.authorization import authorize
 from applib.bucket import list_bucket_objects
 # Performs authentication; maps attributes to normalized ID token.
 from applib.cas import authenticate, sso_logout
-from applib.utils import init_flask_app
+from applib.utils import init_flask_app, make_path_components
 
 app = Flask(__name__)
 
@@ -35,11 +35,16 @@ def stylesheet():
 @app.route("/browse/<path:subpath>")
 @authorize()
 def browse(subpath):
+    # Remove trailing slash from subpath.
+    if subpath.endswith("/"):
+        subpath = subpath[:-1]
     logger.info("subpath: {}".format(subpath))
     objects = list_bucket_objects(subpath)
+    path_components = make_path_components(subpath)
     return render_template(
         "browse.jinja2",
         bucket_objects=objects,
+        path_components=path_components,
         subpath=subpath,
     )
 
