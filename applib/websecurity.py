@@ -34,5 +34,8 @@ def create_content_security_policy():
         "connect-src": [
             "{}.s3.{}.amazonaws.com".format(bucket_name, aws_region),
         ],
+        "frame-src": [
+            "jimmywarting.github.io",
+        ],
     }
     return csp
