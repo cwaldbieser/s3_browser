@@ -32,6 +32,7 @@ def index():
 @authorize()
 def stylesheet():
     resp = Response(render_template("stylesheet.css"), mimetype="text/css")
+    resp.headers["Content-Type"] = "text/css; charset=utf-8"
     return resp
 
 

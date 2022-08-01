@@ -8,6 +8,7 @@
             "CAS_LOGOUT_URL": "https://cas.stage.lafayette.edu/cas/logout",
             "CAS_SERVICE_URL": "https://mwps8d59de.execute-api.us-east-1.amazonaws.com/dev/login",
             "CAS_SERVICE_VALIDATE_URL": "https://cas.stage.lafayette.edu/cas/p3/serviceValidate",
+            "AWS_REGION": "us-east-1",
             "S3_BUCKET": "lc-waldbiec-s3-explorer",
             "S3_DOWNLOAD_ROLE_ARN": "arn:aws:iam::758816453596:role/S3BrowserDownloadRole"
         },
