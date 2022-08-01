@@ -78,6 +78,7 @@ def javascript(subpath):
         )
     else:
         resp = make_response(render_template(subpath), 200)
+    resp.headers["Content-Type"] = "application/javascript; charset=utf-8"
     return resp
 
 
