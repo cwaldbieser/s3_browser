@@ -5,7 +5,7 @@ mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
 proj_dir := $(dir $(mkfile_path))
 env_file := $(proj_dir)dev-env.sh
 env_template_file := $(proj_dir)dev-env.sh.template
-bundle_js := $(proj_dir)templates/bundle.js
+bundle_js := $(proj_dir)static/bundle.js
 main_js := $(proj_dir)src/js/main.js
 node_modules := $(proj_dir)node_modules
 

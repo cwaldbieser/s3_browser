@@ -2,5 +2,5 @@
 dev-env.sh
 dev-identity.json
 node_modules/
-templates/bundle.js
-templates/bundle.js.LICENSE.txt
+static/bundle.js
+static/bundle.js.LICENSE.txt

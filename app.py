@@ -59,26 +59,19 @@ def browse(subpath):
     )
 
 
-@app.route("/js/<path:subpath>")
+@app.route("/js/credentials.js")
 @authorize()
-def javascript(subpath):
-    if subpath.endswith("/"):
-        subpath = subpath[:-1]
-    if subpath not in ("bundle.js", "download.js"):
-        return render_template("404.jinja2"), 404
-    if subpath == "download.js":
-        access_key_id, secret_access_key, session_token = get_aws_credentials()
-        resp = make_response(
-            render_template(
-                subpath,
-                access_key_id=access_key_id,
-                secret_access_key=secret_access_key,
-                session_token=session_token,
-            ),
-            200,
-        )
-    else:
-        resp = make_response(render_template(subpath), 200)
+def credentials_js():
+    access_key_id, secret_access_key, session_token = get_aws_credentials()
+    resp = make_response(
+        render_template(
+            "credentials.js",
+            access_key_id=access_key_id,
+            secret_access_key=secret_access_key,
+            session_token=session_token,
+        ),
+        200,
+    )
     resp.headers["Content-Type"] = "application/javascript; charset=utf-8"
     return resp
 
