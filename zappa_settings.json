@@ -1,0 +1,32 @@
+{
+    "dev": {
+        "app_function": "app.app",
+        "aws_region": "us-east-1",
+        "environment_variables": {
+            "LOG_LEVEL": "INFO",
+            "CAS_LOGIN_URL": "https://cas.stage.lafayette.edu/cas/login",
+            "CAS_LOGOUT_URL": "https://cas.stage.lafayette.edu/cas/logout",
+            "CAS_SERVICE_URL": "https://changeme.example.net/login",
+            "CAS_SERVICE_VALIDATE_URL": "https://cas.stage.lafayette.edu/cas/p3/serviceValidate",
+            "S3_BUCKET": "lc-waldbiec-s3-explorer",
+            "S3_DOWNLOAD_ROLE_ARN": "arn:aws:iam::758816453596:role/S3BrowserDownloadRole"
+        },
+        "exclude": [
+            ".gitignore",
+            "Makefile",
+            "Pipfile",
+            "Pipfile.lock",
+            "README.md",
+            "dev-env.*",
+            "dev-identity.*",
+            "node_modules",
+            "package-lock.json",
+            "package.json",
+            "webpack.config.js"
+        ],
+        "profile_name": "default",
+        "project_name": "s3-browser",
+        "runtime": "python3.9",
+        "s3_bucket": "zappa-7g8b9t0sv"
+    }
+}
