@@ -2,4 +2,5 @@
 
 export CAS_LOGIN_URL="CAS SSO logout URL."
 export CAS_SERVICE_URL="Application /login URL."
+export S3_DOWNLOAD_ROLE_ARN="ARN for S3 downloader role."
 
