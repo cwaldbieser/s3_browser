@@ -24,7 +24,8 @@ def authorize():
                             session["identity"] = json.load(fname)
                         except json.JSONDecodeError:
                             message = (
-                                "Could not decode `APP_DEV_IDENTITY` environment variable."
+                                "Could not decode `APP_DEV_IDENTITY` "
+                                "environment variable."
                             )
                             logger.warn(message)
                     logger.debug(session["identity"])
@@ -40,12 +41,13 @@ def authorize():
             permissions = identity.get("permissions")
             has_permissions = any(permissions.values())
             if not has_permissions:
+                logger.debug("App identity: {}".format(identity))
                 logger.debug(
                     "User `{}`, client IP {} is not authorized for resource `{}`.".format(
                         username, client_ip, request.path
                     )
                 )
-                return render_template("403.html"), 403
+                return render_template("403.jinja2"), 403
             return f(*args, **kwargs)
         return decorated_function
 

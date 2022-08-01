@@ -92,7 +92,8 @@ def logout():
     Logout resource.
     """
     # remove the username from the session if it's there
-    logger.log("Logged out.")
+    username = session["identity"]["sub"]
+    logger.info("User `{}` was logged out.".format(username))
     session.clear()
     return sso_logout()
 

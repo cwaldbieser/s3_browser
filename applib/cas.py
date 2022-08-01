@@ -67,11 +67,13 @@ def authenticate():
         "given_name": None,
         "permissions": get_default_permissions(),
     }
+    logger.debug("Attributes from CAS: {}".format(attributes))
     session["identity"] = identity
     map_permissions(attributes)
     map_attributes(attributes)
     logger.debug("CAS authentication successful for '{}'.".format(user))
     session["username"] = user
+    logger.debug("Application identity: {}".format(identity))
     return redirect(url_for("browse", subpath="top"))
 
 
