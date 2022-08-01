@@ -24,7 +24,6 @@
             "package.json",
             "webpack.config.js"
         ],
-        "profile_name": "default",
         "project_name": "s3-browser",
         "runtime": "python3.9",
         "s3_bucket": "zappa-7g8b9t0sv"
