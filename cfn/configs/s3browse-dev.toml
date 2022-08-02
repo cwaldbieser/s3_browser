@@ -1,0 +1,21 @@
+[application]
+project = "S3 Browser"
+stack_description = "S3 Browser"
+
+[secrets]
+app_secret = "arn:aws:secretsmanager:us-east-1:758816453596:secret:s3browser_secret-EuU9Vz"
+
+[s3]
+bucket_arn = "arn:aws:s3:::lc-waldbiec-s3-explorer"
+
+[log_alarms.webapp]
+log_group = "/aws/lambda/s3browser"
+filter_pattern = "[severity=INFO, timestamp, event_id, client_ip, unk1, unk2, timestamp2, method_resource_version, status_code >= 500 && status_code <= 599, bytes, scheme_netloc, user_agent, unk3]"
+namespace = "Aworkflow"
+alarm_description = "S3 browser logged a 5xx error."
+comparison_operator = "GreaterThanThreshold"
+datapoints_to_alarm = 1
+evaluation_periods = 1
+period = 300
+statistic = "Sum"
+threshold = 0
