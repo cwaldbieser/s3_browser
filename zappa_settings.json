@@ -11,9 +11,9 @@
             "CAS_SERVICE_VALIDATE_URL": "https://cas.stage.lafayette.edu/cas/p3/serviceValidate",
             "AWS_REGION": "us-east-1",
             "S3_BUCKET": "lc-waldbiec-s3-explorer",
-            "S3_ROLE_ARN": "arn:aws:iam::758816453596:role/S3BrowserDownloadRole",
-            "DOWNLOAD_POLICY_ARN": "arn:aws:iam::758816453596:policy/S3BrowserDownloadPolicy",
-            "UPLOAD_POLICY_ARN": "arn:aws:iam::758816453596:policy/S3BrowserUploadPolicy"
+            "S3_ROLE_ARN": "arn:aws:iam::758816453596:role/s3browse-aux-resources-S3AssumedRole-8M7FTD49GTPS",
+            "DOWNLOAD_POLICY_ARN": "arn:aws:iam::758816453596:policy/s3browse-aux-resources-S3DownloadPolicy-XHKXTTUSYXSZ",
+            "UPLOAD_POLICY_ARN": "arn:aws:iam::758816453596:policy/s3browse-aux-resources-S3UploadPolicy-1098LTX8CT8AD"
         },
         "exclude": [
             ".gitignore",
@@ -21,6 +21,7 @@
             "Pipfile",
             "Pipfile.lock",
             "README.md",
+            "cfn",
             "dev-env.*",
             "dev-identity.*",
             "node_modules",
@@ -29,6 +30,8 @@
             "webpack.config.js"
         ],
         "project_name": "s3-browser",
+        "manage_roles": false,
+        "role_arn": "arn:aws:iam::758816453596:role/s3browse-aux-resources-LambdaExecRole-OPVUS880VTCN",
         "runtime": "python3.9",
         "s3_bucket": "zappa-7g8b9t0sv"
     }

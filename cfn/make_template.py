@@ -185,6 +185,8 @@ def make_lambda_exec_policy(t, config, role):
     """
     Make policies that grant Lambda exec privs.
     """
+    bucket_arn = config["s3"]["bucket_arn"]
+    bucket_resource = get_bucket_policy_resource(config)
     secrets = config["secrets"]
     secret_arns = list(secrets.values())
     policy = ManagedPolicy(
@@ -200,6 +202,28 @@ def make_lambda_exec_policy(t, config, role):
                         Action("logs", "PutLogEvents"),
                     ],
                     Resource=["arn:aws:logs:*:*:*"],
+                ),
+                Statement(
+                    Effect=Allow,
+                    Action=[
+                        Action("lambda", "InvokeFunction"),
+                    ],
+                    Resource=["*"],
+                ),
+                Statement(
+                    Effect=Allow,
+                    Action=[
+                        Action("s3", "ListBucket"),
+                    ],
+                    Resource=[bucket_arn],
+                ),
+                Statement(
+                    Effect=Allow,
+                    Action=[
+                        Action("s3", "PutObject"),
+                        Action("s3", "DeleteObject"),
+                    ],
+                    Resource=[bucket_resource],
                 ),
                 Statement(
                     Effect=Allow,
