@@ -5,7 +5,7 @@ import sys
 
 import toml
 from awacs.aws import Action, Allow, PolicyDocument, Principal, Statement
-from troposphere import Ref, Template
+from troposphere import GetAtt, Ref, Template
 from troposphere import cloudwatch as cw
 from troposphere import logs as cwlogs
 from troposphere import sns
@@ -83,7 +83,7 @@ def make_s3_assumed_role(t, lambda_exec_role):
                     Principal=Principal(
                         "AWS",
                         [
-                            Ref(lambda_exec_role),
+                            GetAtt(lambda_exec_role, "Arn"),
                         ],
                     ),
                 )
@@ -214,35 +214,6 @@ def make_lambda_exec_policy(t, config, role):
     )
     t.add_resource(policy)
     return policy
-
-
-def make_lambda_at_edge_exec_role(t, config):
-    """
-    Create Lambda@Edge execution role.
-    """
-    role = Role(
-        "LambdaAtEdgeExecRole",
-        AssumeRolePolicyDocument=PolicyDocument(
-            Statement=[
-                Statement(
-                    Effect=Allow,
-                    Action=[Action("sts", "AssumeRole")],
-                    Principal=Principal(
-                        "Service",
-                        [
-                            "lambda.amazonaws.com",
-                            "edgelambda.amazonaws.com",
-                        ],
-                    ),
-                )
-            ]
-        ),
-        ManagedPolicyArns=[
-            "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-        ],
-    )
-    t.add_resource(role)
-    return role
 
 
 def create_parameters(t):
