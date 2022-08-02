@@ -1,13 +1,15 @@
 
-//const credentials = {
-//  AccessKeyId: "{{ access_key_id }}",
-//  SecretAccessKey: "{{ secret_access_key }}",
-//  SessionToken: "{{ session_token }}",
-//};
-const credentials = {
-  accessKeyId: "{{ access_key_id }}",
-  secretAccessKey: "{{ secret_access_key }}",
-  sessionToken: "{{ session_token }}",
-};
+function configureApp() {
+    console.log("Configuring application ...");
 
-streamSaver.mitm = "{{ url_for("static", filename="mitm.html") }}"
+    // AWS SDK credentials.
+    window.credentials = {
+      accessKeyId: "{{ access_key_id }}",
+      secretAccessKey: "{{ secret_access_key }}",
+      sessionToken: "{{ session_token }}",
+    };
+
+
+    // streamSaver config.
+    window.mitm = "{{ url_for("static", filename="mitm.html") }}"
+}

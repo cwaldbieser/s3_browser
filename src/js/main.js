@@ -59,4 +59,8 @@ function setEventHandlers() {
     await downloadFromS3(bucketName, key, credentials);
   });
 }
-setEventHandlers();
+$(document).ready(function(){
+  configureApp();
+  streamSaver.mitm = window.mitm;
+  setEventHandlers();
+});
