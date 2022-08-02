@@ -5,6 +5,7 @@ from flask_talisman import Talisman
 from logzero import logger
 
 from applib.websecurity import create_content_security_policy
+import boto3
 
 
 def is_dev_env():
@@ -28,16 +29,22 @@ def init_flask_app(app):
     if not is_dev_env():
         Talisman(app, content_security_policy=create_content_security_policy())
     # Set the secret key to some random bytes. Keep this really secret!
-    app.secret_key = get_app_secret()
+    secret_name = os.environ["APP_SECRET"]
+    app.secret_key = get_secret_string(secret_name)
 
 
-def get_app_secret():
+def get_secret_string(secret_name, region="us-east-1"):
     """
-    TODO: Dynamically fetch secret.
+    Get secret string by name.
     """
-    return "c592c74bbb09cd44ce5f3ca0e3e594fa97235e9304d6a357bed4f52e8ad4a742".encode(
-        "utf-8"
+    session = boto3.session.Session()
+    client = session.client(
+        service_name="secretsmanager",
+        region_name=region,
     )
+    get_secret_value_response = client.get_secret_value(SecretId=secret_name)
+    secret = get_secret_value_response["SecretString"]
+    return secret
 
 
 def make_path_components(subpath):

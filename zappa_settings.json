@@ -4,6 +4,7 @@
         "aws_region": "us-east-1",
         "environment_variables": {
             "LOG_LEVEL": "INFO",
+            "APP_SECRET": "s3browser_secret",
             "CAS_LOGIN_URL": "https://cas.stage.lafayette.edu/cas/login",
             "CAS_LOGOUT_URL": "https://cas.stage.lafayette.edu/cas/logout",
             "CAS_SERVICE_URL": "https://mwps8d59de.execute-api.us-east-1.amazonaws.com/dev/login",
