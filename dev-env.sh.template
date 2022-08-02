@@ -3,4 +3,10 @@
 export CAS_LOGIN_URL="CAS SSO logout URL."
 export CAS_SERVICE_URL="Application /login URL."
 export S3_DOWNLOAD_ROLE_ARN="ARN for S3 downloader role."
+export S3_UPLOAD_POLICY_ARN="ARN for S3 downloader role."
+export S3_BUCKET="S3 bucket name."
+export S3_ROLE_ARN="ARN of IAM role assumed for uploads/downloads."
+export DOWNLOAD_POLICY_ARN="ARN of IAM policy used to establish limiting session policy for downloads."
+export UPLOAD_POLICY_ARN="ARN of IAM policy used to establish limiting session policy for uploads."
+export AWS_REGION="AWS region, e.g. us-east-1."
 

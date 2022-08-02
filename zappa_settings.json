@@ -10,7 +10,9 @@
             "CAS_SERVICE_VALIDATE_URL": "https://cas.stage.lafayette.edu/cas/p3/serviceValidate",
             "AWS_REGION": "us-east-1",
             "S3_BUCKET": "lc-waldbiec-s3-explorer",
-            "S3_DOWNLOAD_ROLE_ARN": "arn:aws:iam::758816453596:role/S3BrowserDownloadRole"
+            "S3_ROLE_ARN": "arn:aws:iam::758816453596:role/S3BrowserDownloadRole",
+            "DOWNLOAD_POLICY_ARN": "arn:aws:iam::758816453596:policy/S3BrowserDownloadPolicy",
+            "UPLOAD_POLICY_ARN": "arn:aws:iam::758816453596:policy/S3BrowserUploadPolicy"
         },
         "exclude": [
             ".gitignore",
