@@ -5,6 +5,8 @@ from functools import wraps
 from flask import redirect, render_template, request, session, url_for
 from logzero import logger
 
+from applib.permissions import list_files
+
 
 def authorize():
     """
@@ -39,7 +41,8 @@ def authorize():
                 return redirect(url_for("login"))
             username = identity["sub"]
             permissions = identity.get("permissions")
-            has_permissions = any(permissions.values())
+            # Require `list_files` to use the application at all.
+            has_permissions = permissions[list_files]
             if not has_permissions:
                 logger.debug("App identity: {}".format(identity))
                 logger.debug(

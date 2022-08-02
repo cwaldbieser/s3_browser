@@ -26,7 +26,20 @@ async function downloadFromS3(bucketName, key, credentials) {
 
   const client = new S3Client(config);
   const command = new GetObjectCommand(bucketParams);
-  const response = await client.send(command);
+  async function getDownloadResponse(){
+    try {
+      return await client.send(command);
+    }
+    catch(error) {
+      console.log(error);
+      return null;
+    }
+  }
+  const response = await getDownloadResponse();
+  if(response == null){
+    alert("Permission error downloading file.");
+    return;
+  }
   const contentType = response.Body.contentType
 
   // streamSaver.createWriteStream() returns a writable byte stream

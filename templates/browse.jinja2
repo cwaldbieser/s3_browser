@@ -41,7 +41,11 @@
                           <td>{{ item.key }}</td>
                           <td>{{ item.size }}</td>
                           <td>{{ item.last_modified }}</td>
-                          <td><a class="btn btn-primary" href="#" role="button" data-key="{{ bucket_path }}{% if bucket_path %}/{% endif %}{{ item.key }}"><i class="fa fa-download" aria-hidden="true"></i></a></td>
+                          <td>
+                            {% if allow_download_file %}
+                            <a class="btn btn-primary" href="#" role="button" data-key="{{ bucket_path }}{% if bucket_path %}/{% endif %}{{ item.key }}"><i class="fa fa-download" aria-hidden="true"></i></a>
+                            {% endif %}  
+                          </td>
                         </tr>
                         {% endfor %}
                       </tbody>
