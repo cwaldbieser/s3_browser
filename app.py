@@ -59,13 +59,13 @@ def browse(subpath):
     )
 
 
-@app.route("/js/credentials.js")
+@app.route("/js/appconfig.js")
 @authorize()
-def credentials_js():
+def appconfig_js():
     access_key_id, secret_access_key, session_token = get_aws_credentials()
     resp = make_response(
         render_template(
-            "credentials.js",
+            "appconfig.jinja2",
             access_key_id=access_key_id,
             secret_access_key=secret_access_key,
             session_token=session_token,
