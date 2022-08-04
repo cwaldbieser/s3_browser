@@ -32,6 +32,7 @@ def create_content_security_policy():
             "maxcdn.bootstrapcdn.com",
         ],
         "connect-src": [
+            "'self'",
             "{}.s3.{}.amazonaws.com".format(bucket_name, aws_region),
         ],
         "frame-src": [

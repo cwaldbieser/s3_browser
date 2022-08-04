@@ -59,15 +59,17 @@ def delete_file_from_bucket(key):
     """
     Delete a file from the S3 bucket.
     """
+    logger.debug("Entered delete_file_from_bucket().")
     if key.endswith("/"):
         return "Bad Request", 400
     bucket_name = os.environ.get("S3_BUCKET")
     bucket_root = os.environ.get("BUCKET_ROOT", "")
     if not key.startswith(bucket_root):
         return "Forbidden", 403
+    logger.debug("Deleting bucket: {}, key: {} ...".format(bucket_name, key))
     client = boto3.client("s3")
     resp = client.delete_object(Bucket=bucket_name, Key=key)
-    logger.debug("Response: {}".format(resp))
+    logger.debug("Response from deleting file: {}".format(resp))
     meta = resp["ResponseMetadata"]
     http_status = meta["HTTPStatusCode"]
     return "Response Status", http_status
