@@ -4,7 +4,7 @@ import boto3
 from flask import session
 from logzero import logger
 
-from applib.permissions import download_file, has_permission
+from applib.permissions import download_file, has_permission, upload_file
 
 
 def get_aws_credentials():
@@ -17,6 +17,9 @@ def get_aws_credentials():
     if has_permission(download_file):
         download_policy_arn = get_arn_from_env("DOWNLOAD_POLICY_ARN")
         policy_arns.append({"arn": download_policy_arn})
+    if has_permission(upload_file):
+        upload_policy_arn = get_arn_from_env("UPLOAD_POLICY_ARN")
+        policy_arns.append({"arn": upload_policy_arn})
     logger.debug(
         "Policy ARNs for temporary credentials for `{}`: {}.".format(
             username, policy_arns

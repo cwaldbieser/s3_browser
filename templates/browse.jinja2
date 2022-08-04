@@ -26,6 +26,18 @@
                 </div>
                 <div>
                     <h4>Files</h4>
+                    {% if allow_upload_file %}
+                    <div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
+                    <div class="card-header"><h5>Upload a file<h5></div>
+                    <form style="padding:5px">
+                        <div>
+                            <input id="fileupload" type="file" />
+                            <div id="fileUploadHelp" class="form-text">File will be uploaded to the web site.</div>
+                        </div>
+                        <a id="upload-button" class="btn btn-primary" href="#" role="button" data-prefix="{{ bucket_path }}">Upload <i class="fa fa-upload" aria-hidden="true"></i></a>
+                    </form>
+                    </div>
+                    {% endif %}
                     <table class="table table-striped table-dark">
                       <thead>
                         <tr>
@@ -44,7 +56,7 @@
                           <td>
                             {% if allow_download_file %}
                             <a class="btn btn-primary" href="#" role="button" data-key="{{ bucket_path }}{% if bucket_path %}/{% endif %}{{ item.key }}"><i class="fa fa-download" aria-hidden="true"></i></a>
-                            {% endif %}  
+                            {% endif %}
                           </td>
                         </tr>
                         {% endfor %}

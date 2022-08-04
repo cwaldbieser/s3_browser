@@ -2,7 +2,7 @@
 var $ = require( "jquery" );
 
 // import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3"; // ES Modules import
-const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3"); // CommonJS import
+const { S3Client, GetObjectCommand, PutObjectCommand } = require("@aws-sdk/client-s3"); // CommonJS import
 
 const streamSaver = require('streamsaver')
 
@@ -12,7 +12,6 @@ async function downloadFromS3(bucketName, key, credentials) {
   // StreamSaver can detect and use the Ponyfill that is loaded from the cdn.
   streamSaver.WritableStream = streamSaver.WritableStream
 
-  // Initialize the Amazon Cognito credentials provider
   const REGION = "us-east-1"; //e.g., 'us-east-1'
   const config = {
     region: REGION,
@@ -65,11 +64,54 @@ async function downloadFromS3(bucketName, key, credentials) {
   pump()
 }
 
+async function uploadFileHandler(bucketName) {
+  var files = document.getElementById("fileupload").files;
+  if (!files.length) {
+    return alert("Please choose a file to upload first.");
+  }
+  var file = files[0];
+  var fileName = file.name;
+  var bucketPrefix = $("#upload-button").data("prefix");
+  var fileKey = "";
+  if(bucketPrefix != "") {
+    fileKey = bucketPrefix + "/" + fileName;
+  }
+  else {
+    fileKey = fileName;
+  }
+
+  const REGION = "us-east-1"; //e.g., 'us-east-1'
+  const config = {
+    region: REGION,
+    credentials: credentials}
+
+  const s3 = new S3Client(config);
+  const uploadParams = {
+    Bucket: bucketName,
+    Key: fileKey,
+    Body: file,
+  }
+
+  try {
+    const data = await s3.send(new PutObjectCommand(uploadParams));
+    alert("Successfully uploaded photo.");
+    viewAlbum(albumName);
+  }
+  catch (err) {
+    console.log(err)
+    return alert("There was an error uploading your photo: ", err.message);
+  }
+}
+
+
 function setEventHandlers() {
+  var bucketName = $("#bucket").data("bucket");
   $("a[data-key]").click(async function(){
     var key = $( this ).data("key");
-    var bucketName = $("#bucket").data("bucket");
     await downloadFromS3(bucketName, key, credentials);
+  });
+  $("#upload-button").click(function(){
+    uploadFileHandler(bucketName);
   });
 }
 $(document).ready(function(){
