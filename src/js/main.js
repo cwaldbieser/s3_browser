@@ -95,7 +95,7 @@ async function uploadFileHandler(bucketName) {
   try {
     const data = await s3.send(new PutObjectCommand(uploadParams));
     alert("Successfully uploaded photo.");
-    viewAlbum(albumName);
+    location.reload();
   }
   catch (err) {
     console.log(err)
