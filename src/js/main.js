@@ -106,7 +106,7 @@ async function uploadFileHandler(bucketName) {
 
 function setEventHandlers() {
   var bucketName = $("#bucket").data("bucket");
-  $("a[data-key]").click(async function(){
+  $("a[data-btnType='upload']").click(async function(){
     var key = $( this ).data("key");
     await downloadFromS3(bucketName, key, credentials);
   });

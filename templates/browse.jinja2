@@ -43,7 +43,10 @@
                           <td>{{ item.last_modified }}</td>
                           <td>
                             {% if allow_download_file %}
-                            <a class="btn btn-primary" href="#" role="button" data-key="{{ bucket_path }}{% if bucket_path %}/{% endif %}{{ item.key }}"><i class="fa fa-download" aria-hidden="true"></i></a>
+                            <a class="btn btn-primary" href="#" role="button" data-btnType="upload" data-key="{{ bucket_path }}{% if bucket_path %}/{% endif %}{{ item.key }}" title="Download file."><i class="fa fa-download" aria-hidden="true"></i></a>
+                            {% endif %}
+                            {% if allow_remove_file %}
+                            <a class="btn btn-primary" href="#" role="button" data-btnType="delete" data-key="{{ bucket_path }}{% if bucket_path %}/{% endif %}{{ item.key }}" title="Delete file."><i class="fa fa-trash" aria-hidden="true"></i></a>
                             {% endif %}
                           </td>
                         </tr>
@@ -53,7 +56,7 @@
                     {% if allow_upload_file %}
                     <div class="card text-white bg-dark mb-3">
                     <div class="card-header"><h5>Upload a file<h5></div>
-                    <form style="padding:5px">
+                    <form class="uploadform">
                         <div>
                             <input id="fileupload" type="file" />
                             <div id="fileUploadHelp" class="form-text">File will be uploaded to the web site.</div>

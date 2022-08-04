@@ -14,7 +14,7 @@ from applib.aws import get_aws_credentials
 from applib.bucket import list_bucket_objects, resource_to_bucket_path
 # Performs authentication; maps attributes to normalized ID token.
 from applib.cas import authenticate, sso_logout
-from applib.permissions import download_file, has_permission, upload_file
+from applib.permissions import download_file, has_permission, upload_file, remove_file
 from applib.utils import init_flask_app, make_path_components
 
 app = Flask(__name__)
@@ -53,6 +53,7 @@ def browse(subpath):
         bucket_path = bucket_path[:-1]
     allow_download_file = has_permission(download_file)
     allow_upload_file = has_permission(upload_file)
+    allow_remove_file = has_permission(remove_file)
     appconfig_version = str(uuid.uuid4())
     return render_template(
         "browse.jinja2",
@@ -64,6 +65,7 @@ def browse(subpath):
         bucket_path=bucket_path,
         allow_download_file=allow_download_file,
         allow_upload_file=allow_upload_file,
+        allow_remove_file=allow_remove_file,
     )
 
 
