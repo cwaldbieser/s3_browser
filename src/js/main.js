@@ -104,14 +104,40 @@ async function uploadFileHandler(bucketName) {
 }
 
 
+function deleteFromS3(key) {
+  var path = location.pathname;
+  if(path != "" && !path.endsWith("/")) {
+    path = path + "/";
+  }
+  path = path + key;
+  var url = new URL(location);
+  url.pathname = path;
+  console.log(url);
+  fetch(url, {
+    method: "DELETE",
+    credentials: 'same-origin',
+    headers: {
+      'X-CSRFToken': csrf_token,
+    },
+  }).then(function(data){
+    console.log(data)
+    location.reload();
+  });
+}
+
+
 function setEventHandlers() {
   var bucketName = $("#bucket").data("bucket");
-  $("a[data-btnType='upload']").click(async function(){
+  $("a[data-btnType='download']").click(async function(){
     var key = $( this ).data("key");
     await downloadFromS3(bucketName, key, credentials);
   });
   $("#upload-button").click(function(){
     uploadFileHandler(bucketName);
+  });
+  $("a[data-btnType='delete']").click(async function(){
+    var key = $( this ).data("key");
+    await deleteFromS3(key);
   });
 }
 $(document).ready(function(){

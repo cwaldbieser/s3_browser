@@ -4,14 +4,14 @@ import boto3
 from logzero import logger
 
 
-def resource_to_bucket_path(path):
+def resource_to_bucket_path(path, force_endslash=True):
     """
     Convert the web path to the bucket path.
     """
     bucket_root = os.environ.get("BUCKET_ROOT", "")
     if bucket_root.endswith("/"):
         bucket_root = bucket_root[:-1]
-    if not path.endswith("/"):
+    if not path.endswith("/") and force_endslash:
         path = path + "/"
     top, subpath = path.split("/", 1)
     if top != "top":

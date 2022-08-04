@@ -12,4 +12,7 @@ function configureApp() {
 
     // streamSaver config.
     window.mitm = "{{ url_for("static", filename="mitm.html") }}"
+
+    // CSRF token.
+    window.csrf_token = "{{ csrf_token() }}";
 }

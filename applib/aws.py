@@ -53,3 +53,28 @@ def get_arn_from_env(symbol):
     message = "You must set the environment variable `{}`.".format(symbol)
     assert arn is not None, Exception(message)
     return arn
+
+
+def delete_file_from_bucket(key):
+    """
+    Delete a file from the S3 bucket.
+    """
+    if key.endswith("/"):
+        return "Bad Request", 400
+    bucket_name = os.environ.get("S3_BUCKET")
+    bucket_root = os.environ.get("BUCKET_ROOT", "")
+    if not key.startswith(bucket_root):
+        return "Forbidden", 403
+    client = boto3.client("s3")
+    resp = client.delete_object(Bucket=bucket_name, Key=key)
+    logger.debug("Response: {}".format(resp))
+    meta = resp["ResponseMetadata"]
+    http_status = meta["HTTPStatusCode"]
+    return "Response Status", http_status
+
+
+def delete_folder_from_bucket(key):
+    """
+    Delete a folder from the S3 bucket.
+    """
+    return "OK", 200
