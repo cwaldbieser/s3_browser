@@ -120,9 +120,19 @@ function deleteFromS3(key) {
       'X-CSRFToken': csrf_token,
     },
   }).then(function(data){
-    console.log(data)
-    location.reload();
-  });
+      if(data.status < 200 || data.status > 299) {
+        console.log(data)
+        alert("Could not delete object.");
+      }
+      else {
+        location.reload();
+      }
+    },
+    function(reason){
+      alert("Could not delete object.");
+      console.log("Failure: " + reason);
+    }
+  );
 }
 
 

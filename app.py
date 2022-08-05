@@ -64,6 +64,7 @@ def __browse_GET(subpath):
     allow_download_file = has_permission(download_file)
     allow_upload_file = has_permission(upload_file)
     allow_remove_file = has_permission(remove_file)
+    allow_remove_folder = has_permission(remove_folder)
     appconfig_version = str(uuid.uuid4())
     return render_template(
         "browse.jinja2",
@@ -76,6 +77,7 @@ def __browse_GET(subpath):
         allow_download_file=allow_download_file,
         allow_upload_file=allow_upload_file,
         allow_remove_file=allow_remove_file,
+        allow_remove_folder=allow_remove_folder,
     )
 
 

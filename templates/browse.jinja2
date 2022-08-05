@@ -11,6 +11,7 @@
                           <th scope="col">Name</th>
                           <th scope="col">Size</th>
                           <th scope="col">Last Modified</th>
+                          <th></th>
                         </tr>
                       </thead>
                       <tbody>
@@ -19,6 +20,11 @@
                         <td><a href="{{ subpath }}/{{ item.key}}">{{ item.key }}</a></td>
                           <td>{{ item.size }}</td>
                           <td>{{ item.last_modified }}</td>
+                          <td>
+                            {% if allow_remove_folder %}
+                            <a class="btn btn-primary" href="#" role="button" data-btnType="delete" data-key="{{ item.key }}" title="Delete folder."><i class="fa fa-trash" aria-hidden="true"></i></a>
+                            {% endif %}
+                          </td>
                         </tr>
                         {% endfor %}
                       </tbody>
