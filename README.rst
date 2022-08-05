@@ -105,3 +105,25 @@ Run the `make_template.py` script to generate the CloudFormation template.
 The resulting template can be used to replace the current template in the
 auxilliary stack.  It will add alarms and notifications.
 
+Target S3 Bucket CORS
+=====================
+
+CORS must be configured on the target bucket:
+
+.. code::json
+
+    [
+        {
+            "AllowedHeaders": [
+                "*"
+            ],
+            "AllowedMethods": [
+                "GET",
+                "PUT"
+            ],
+            "AllowedOrigins": [
+                "*"
+            ],
+            "ExposeHeaders": []
+        }
+    ]

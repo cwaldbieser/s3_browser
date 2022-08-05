@@ -1,6 +1,5 @@
----
-title: S3 Browser
----
+S3 Browser
+==========
 
 A simple application for browsing and performing basic file operations
 on objects in an S3 bucket. Operations supported are:
@@ -15,7 +14,7 @@ on objects in an S3 bucket. Operations supported are:
 These permissions can be configured on a per-user basis.
 
 Deployment
-==========
+----------
 
 -   Create a secret in the target account for the application secret.
 -   Deploy auxilliary templates.
@@ -24,8 +23,7 @@ Deployment
 -   Update zappa app.
 -   update auxilliary templates.
 
-Create Application Secret
--------------------------
+### Create Application Secret
 
 A long string of high entropy characters. An easy way to generate it:
 
@@ -34,8 +32,7 @@ A long string of high entropy characters. An easy way to generate it:
 > secrets.token_hex()
 ```
 
-Deploy Auxilliary Templates
----------------------------
+### Deploy Auxilliary Templates
 
 \$CONFIG\_FILE is the name of your config file in TOML format.
 
@@ -56,8 +53,7 @@ $ ./make_template.py --bootstrap cfn/$CONFIG_FILE | tee /tmp/template.yml
 
 The resulting template can be used to deploy a stack in CloudFormation.
 
-Update zappa\_settings.json
----------------------------
+### Update zappa\_settings.json
 
 -   alter stage name (e.g. "dev" -&gt; "stage").
 -   edit APP\_SECRET with secret name (not full ARN).
@@ -75,15 +71,13 @@ Update zappa\_settings.json
         -   UPLOAD\_POLICY\_ARN - use the S3UploadPolicy
         -   role\_arn - Use the LambdaExecRole
 
-Deploy Zappa App
-----------------
+### Deploy Zappa App
 
 ``` {.sourceCode .sh}
 $ zappa deploy stage
 ```
 
-Update Zappa App
-----------------
+### Update Zappa App
 
 Using the URL produced during the previous step, update the
 "CAS\_SERVICE\_URL" to be the base URL plus the "login" resource. E.g.
@@ -97,8 +91,7 @@ $ zappa update stage
 
 This sets the correct callback URL for CAS authentication.
 
-Update Auxilliary Templates
----------------------------
+### Update Auxilliary Templates
 
 Run the make\_template.py script to generate the CloudFormation
 template.
@@ -109,3 +102,26 @@ $ ./make_template.py cfn/$CONFIG_FILE | tee /tmp/template.yml
 
 The resulting template can be used to replace the current template in
 the auxilliary stack. It will add alarms and notifications.
+
+Target S3 Bucket CORS
+=====================
+
+CORS must be configured on the target bucket:
+
+``` {.sourceCode .json}
+[
+    {
+        "AllowedHeaders": [
+            "*"
+        ],
+        "AllowedMethods": [
+            "GET",
+            "PUT"
+        ],
+        "AllowedOrigins": [
+            "*"
+        ],
+        "ExposeHeaders": []
+    }
+]
+```
