@@ -10,6 +10,7 @@
             "CAS_SERVICE_URL": "https://kjsex9np0b.execute-api.us-east-1.amazonaws.com/stage/login",
             "CAS_SERVICE_VALIDATE_URL": "https://cas.stage.lafayette.edu/cas/p3/serviceValidate",
             "AWS_REGION": "us-east-1",
+            "S3BROWSER_ENTITLEMENT_PREFIX": "https://s3browser.lafayette.edu/file-transfers-stage/permissions",
             "S3_BUCKET": "lc-file-transfer-stage-s3browser",
             "S3_ROLE_ARN": "arn:aws:iam::776837491846:role/s3browser-S3AssumedRole-13XV36J5YC7Z3",
             "DOWNLOAD_POLICY_ARN": "arn:aws:iam::776837491846:policy/s3browser-S3DownloadPolicy-1S2WJ0RWNM2DI",
