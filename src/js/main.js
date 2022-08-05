@@ -94,12 +94,12 @@ async function uploadFileHandler(bucketName) {
 
   try {
     const data = await s3.send(new PutObjectCommand(uploadParams));
-    alert("Successfully uploaded photo.");
+    alert("Successfully uploaded file.");
     location.reload();
   }
   catch (err) {
     console.log(err)
-    return alert("There was an error uploading your photo: ", err.message);
+    return alert("There was an error uploading your file: ", err.message);
   }
 }
 
@@ -136,6 +136,49 @@ function deleteFromS3(key) {
 }
 
 
+async function createFolder(){
+  var foldername = $("#foldername").val().trim();
+  if(foldername == "") {
+    alert("Folder name cannot be blank.")
+  }
+  else if(foldername.includes("/")) {
+    alert("Folder name cannot include '/'.");
+  }
+  else {
+    console.log(foldername);
+    $("#foldername").val("");
+    var path = location.pathname;
+    if(path != "" && !path.endsWith("/")) {
+      path = path + "/";
+    }
+    path = path + foldername;
+    var url = new URL(location);
+    url.pathname = path;
+    console.log(url);
+    fetch(url, {
+      method: "PUT",
+      credentials: 'same-origin',
+      headers: {
+        'X-CSRFToken': csrf_token,
+      },
+    }).then(function(data){
+        if(data.status < 200 || data.status > 299) {
+          console.log(data)
+          alert("Could not create folder.");
+        }
+        else {
+          location.reload();
+        }
+      },
+      function(reason){
+        alert("Could not create folder.");
+        console.log("Failure: " + reason);
+      }
+    );
+  }
+}
+
+
 function setEventHandlers() {
   var bucketName = $("#bucket").data("bucket");
   $("a[data-btnType='download']").click(async function(){
@@ -148,6 +191,9 @@ function setEventHandlers() {
   $("a[data-btnType='delete']").click(async function(){
     var key = $( this ).data("key");
     await deleteFromS3(key);
+  });
+  $("#create-folder").click(async function(){
+    await createFolder();
   });
 }
 $(document).ready(function(){

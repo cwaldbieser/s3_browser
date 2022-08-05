@@ -10,13 +10,13 @@ from logzero import logger
 
 # Enforces permissions at each route.
 from applib.authorization import authorize
-from applib.aws import (delete_file_from_bucket, delete_folder_from_bucket,
-                        get_aws_credentials)
+from applib.aws import (create_bucket_folder, delete_file_from_bucket,
+                        delete_folder_from_bucket, get_aws_credentials)
 from applib.bucket import list_bucket_objects, resource_to_bucket_path
 # Performs authentication; maps attributes to normalized ID token.
 from applib.cas import authenticate, sso_logout
-from applib.permissions import (download_file, has_permission, remove_file,
-                                remove_folder, upload_file)
+from applib.permissions import (create_folder, download_file, has_permission,
+                                remove_file, remove_folder, upload_file)
 from applib.utils import init_flask_app, make_path_components
 
 app = Flask(__name__)
@@ -40,11 +40,13 @@ def stylesheet():
     return resp
 
 
-@app.route("/browse/<path:subpath>", methods=["GET", "DELETE"])
+@app.route("/browse/<path:subpath>", methods=["GET", "DELETE", "PUT"])
 @authorize()
 def browse(subpath):
     if request.method == "DELETE":
         resp = __browse_DELETE(subpath)
+    elif request.method == "PUT":
+        resp = __browse_PUT(subpath)
     else:
         resp = __browse_GET(subpath)
     return resp
@@ -65,6 +67,7 @@ def __browse_GET(subpath):
     allow_upload_file = has_permission(upload_file)
     allow_remove_file = has_permission(remove_file)
     allow_remove_folder = has_permission(remove_folder)
+    allow_create_folder = has_permission(create_folder)
     appconfig_version = str(uuid.uuid4())
     return render_template(
         "browse.jinja2",
@@ -78,6 +81,7 @@ def __browse_GET(subpath):
         allow_upload_file=allow_upload_file,
         allow_remove_file=allow_remove_file,
         allow_remove_folder=allow_remove_folder,
+        allow_create_folder=allow_create_folder,
     )
 
 
@@ -100,6 +104,12 @@ def __browse_DELETE(subpath):
     if is_folder:
         return delete_folder_from_bucket(key)
     return "Bad Request", 400
+
+
+def __browse_PUT(subpath):
+    key = resource_to_bucket_path(subpath)
+    logger.debug("New folder: {}".format(key))
+    return create_bucket_folder(key)
 
 
 @app.route("/js/<uuid:version>.js")

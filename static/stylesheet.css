@@ -13,5 +13,9 @@ div.card-thin {
 }
 
 form.uploadform {
-    padding: 5px;
+    padding: 0.5em;
+}
+
+form.folderform {
+  padding: 0.5em;
 }

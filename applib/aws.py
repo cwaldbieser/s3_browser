@@ -113,3 +113,23 @@ def delete_folder_from_bucket(key):
     meta = resp["ResponseMetadata"]
     http_status = meta["HTTPStatusCode"]
     return "Response Status", http_status
+
+
+def create_bucket_folder(key):
+    """
+    Create a bucket folder.
+    """
+    if not key.endswith("/"):
+        return "Bad Request", 400
+    bucket_name = os.environ.get("S3_BUCKET")
+    bucket_root = os.environ.get("BUCKET_ROOT", "")
+    if not key.startswith(bucket_root):
+        return "Forbidden", 403
+    if key == bucket_root:
+        return "Forbidden", 403
+    client = boto3.client("s3")
+    resp = client.put_object(Bucket=bucket_name, Key=key)
+    logger.debug("Response from creating folder: {}".format(resp))
+    meta = resp["ResponseMetadata"]
+    http_status = meta["HTTPStatusCode"]
+    return "Response Status", http_status
