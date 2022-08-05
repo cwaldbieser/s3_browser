@@ -3,10 +3,10 @@ project = "S3 Browser"
 stack_description = "S3 Browser"
 
 [secrets]
-app_secret = "arn:aws:secretsmanager:us-east-1:758816453596:secret:s3browser_secret-EuU9Vz"
+app_secret = "arn:aws:secretsmanager:us-east-1:776837491846:secret:s3browser_app_secret-VEwnSi"
 
 [s3]
-bucket_arn = "arn:aws:s3:::lc-waldbiec-s3-explorer"
+bucket_arn = "arn:aws:s3:::lc-file-transfer-stage-s3browser"
 
 [log_alarms.webapp]
 log_group = "/aws/lambda/s3-browser-dev"

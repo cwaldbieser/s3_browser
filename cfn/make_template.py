@@ -20,7 +20,7 @@ def main(args):
     t = Template()
     t.set_description(config["application"]["stack_description"])
     params = create_parameters(t)
-    resources = create_resources(t, config, params)
+    resources = create_resources(t, config, params, bootstrap=args.bootstrap)
     create_outputs(t, resources)
     if args.json:
         print(t.to_json(), file=args.outfile)
@@ -323,7 +323,7 @@ def create_metric_filter(
     return metric_filter
 
 
-def create_resources(t, config, params):
+def create_resources(t, config, params, bootstrap=False):
     """
     Create CloudFormation resources and return a mapping of those.  See
     https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resources-section-structure.html
@@ -333,8 +333,9 @@ def create_resources(t, config, params):
     make_s3_upload_policy(t, config, assumed_role)
     make_s3_download_policy(t, config, assumed_role)
     make_lambda_exec_policy(t, config, role)
-    alarm_topic = create_sns_topic(t, config, "s3browser_alarms_topic")
-    create_log_alarms(t, config, alarm_topic)
+    if bootstrap:
+        alarm_topic = create_sns_topic(t, config, "s3browser_alarms_topic")
+        create_log_alarms(t, config, alarm_topic)
 
 
 def create_outputs(t, resources):
@@ -357,6 +358,11 @@ if __name__ == "__main__":
         type=argparse.FileType("w"),
         default=sys.stdout,
         help="Output file.  Use `-` for STDOUT.",
+    )
+    parser.add_argument(
+        "--bootstrap",
+        action="store_true",
+        help="Create resources needed to bootstrap the Zappa deployment.",
     )
     args = parser.parse_args()
     main(args)

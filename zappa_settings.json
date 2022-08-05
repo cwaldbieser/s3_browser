@@ -1,19 +1,19 @@
 {
-    "dev": {
+    "stage": {
         "app_function": "app.app",
         "aws_region": "us-east-1",
         "environment_variables": {
             "LOG_LEVEL": "INFO",
-            "APP_SECRET": "s3browser_secret",
+            "APP_SECRET": "s3browser_app_secret",
             "CAS_LOGIN_URL": "https://cas.stage.lafayette.edu/cas/login",
             "CAS_LOGOUT_URL": "https://cas.stage.lafayette.edu/cas/logout",
-            "CAS_SERVICE_URL": "https://mwps8d59de.execute-api.us-east-1.amazonaws.com/dev/login",
+            "CAS_SERVICE_URL": "https://kjsex9np0b.execute-api.us-east-1.amazonaws.com/stage/login",
             "CAS_SERVICE_VALIDATE_URL": "https://cas.stage.lafayette.edu/cas/p3/serviceValidate",
             "AWS_REGION": "us-east-1",
-            "S3_BUCKET": "lc-waldbiec-s3-explorer",
-            "S3_ROLE_ARN": "arn:aws:iam::758816453596:role/s3browse-aux-resources-S3AssumedRole-8M7FTD49GTPS",
-            "DOWNLOAD_POLICY_ARN": "arn:aws:iam::758816453596:policy/s3browse-aux-resources-S3DownloadPolicy-XHKXTTUSYXSZ",
-            "UPLOAD_POLICY_ARN": "arn:aws:iam::758816453596:policy/s3browse-aux-resources-S3UploadPolicy-1098LTX8CT8AD"
+            "S3_BUCKET": "lc-file-transfer-stage-s3browser",
+            "S3_ROLE_ARN": "arn:aws:iam::776837491846:role/s3browser-S3AssumedRole-13XV36J5YC7Z3",
+            "DOWNLOAD_POLICY_ARN": "arn:aws:iam::776837491846:policy/s3browser-S3DownloadPolicy-1S2WJ0RWNM2DI",
+            "UPLOAD_POLICY_ARN": "arn:aws:iam::776837491846:policy/s3browser-S3UploadPolicy-EBPW69EBPH8M"
         },
         "exclude": [
             ".gitignore",
@@ -31,8 +31,8 @@
         ],
         "project_name": "s3-browser",
         "manage_roles": false,
-        "role_arn": "arn:aws:iam::758816453596:role/s3browse-aux-resources-LambdaExecRole-OPVUS880VTCN",
+        "role_arn": "arn:aws:iam::776837491846:role/s3browser-LambdaExecRole-6LSGL6U8WGL7",
         "runtime": "python3.9",
-        "s3_bucket": "zappa-7g8b9t0sv"
+        "s3_bucket": "zappa-835a617a7"
     }
 }

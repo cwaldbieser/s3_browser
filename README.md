@@ -14,36 +14,98 @@ on objects in an S3 bucket. Operations supported are:
 
 These permissions can be configured on a per-user basis.
 
-Web Privacy & Security
-======================
+Deployment
+==========
 
-Firefox
--------
+-   Create a secret in the target account for the application secret.
+-   Deploy auxilliary templates.
+-   Update zappa\_settings.json.
+-   Deploy zappa app.
+-   Update zappa app.
+-   update auxilliary templates.
 
-Firefox 101.0.1 would not successfully run the download script without
-some tweaking.
+Create Application Secret
+-------------------------
 
-tl;dr Add the setting privacy.restrict3rdpartystorage.skip\_list in
-about:config if it's not there already. Add an entry that allows your
-first-party domain to allow a third party domain to use storage. E.g.
+A long string of high entropy characters. An easy way to generate it:
 
-> privacy.restrict3rdpartystorage.skip\_list:
-> <https://mwps8d59de.execute-api.us-east-1.amazonaws.com,https://jimmywarting.github.io>
+``` {.sourceCode .python}
+> import secrets
+> secrets.token_hex()
+```
 
-This might be mitigated by self-hosting the mitm.html frame. This
-requires further research. The symptoms included messages in the
-console:
+Deploy Auxilliary Templates
+---------------------------
 
--   ERROR: Failed to get service worker registration(s): Storage access
-    is restricted in this context due to user settings or private
-    browsing mode.
--   ERROR: Uncaught (in promise) DOMException: The operation is
-    insecure.
--   WARNING: Partitioned cookie or storage access was provided to
-    “<https://jimmywarting.github.io/StreamSaver.js/mitm.html?version=2.0.0>”
-    because it is loaded in the third-party context and dynamic state
-    partitioning is enabled.
+\$CONFIG\_FILE is the name of your config file in TOML format.
 
-It is the last warning that has a link to what is going wrong. The
-documentation about this is here:
-<https://developer.mozilla.org/en-US/docs/Web/Privacy/State_Partitioning#disable_dynamic_state_partitioning>
+-   Change folders into the cfn folder.
+-   Edit the cfn/\$CONFIG\_FILE.
+-   Edit the secrets.app\_secret ARN with the ARN of the secret from the
+    previous section.
+-   Edit the s3.bucket\_arn setting with the ARN of the target S3
+    bucket.
+-   Edit any logging settings as appropriate.
+
+Run the make\_template.py script to generate the CloudFormation
+template.
+
+``` {.sourceCode .sh}
+$ ./make_template.py --bootstrap cfn/$CONFIG_FILE | tee /tmp/template.yml
+```
+
+The resulting template can be used to deploy a stack in CloudFormation.
+
+Update zappa\_settings.json
+---------------------------
+
+-   alter stage name (e.g. "dev" -&gt; "stage").
+-   edit APP\_SECRET with secret name (not full ARN).
+-   edit S3\_BUCKET with bucket name (not full ARN).
+-   s3\_bucket setting must be the name of a code deploy bucket.
+-   edit other settings as appropriate.
+-   set CAS\_SERVICE\_URL to "<https://www.example.net/login>", this
+    will need to be updated after initial deployment.
+-   
+
+    edit role and policy ARNs with resources created in previous section.
+
+    :   -   S3\_ROLE\_ARN - use the S3AssumedRole
+        -   DOWNLOAD\_POLICY\_ARN - use the S3DownloadPolicy
+        -   UPLOAD\_POLICY\_ARN - use the S3UploadPolicy
+        -   role\_arn - Use the LambdaExecRole
+
+Deploy Zappa App
+----------------
+
+``` {.sourceCode .sh}
+$ zappa deploy stage
+```
+
+Update Zappa App
+----------------
+
+Using the URL produced during the previous step, update the
+"CAS\_SERVICE\_URL" to be the base URL plus the "login" resource. E.g.
+"<https://$SOME_RANDOM_CHARS.execute-api.$REGION_CODE.amazonaws.com/stage/login>"
+
+Then:
+
+``` {.sourceCode .sh}
+$ zappa update stage
+```
+
+This sets the correct callback URL for CAS authentication.
+
+Update Auxilliary Templates
+---------------------------
+
+Run the make\_template.py script to generate the CloudFormation
+template.
+
+``` {.sourceCode .sh}
+$ ./make_template.py cfn/$CONFIG_FILE | tee /tmp/template.yml
+```
+
+The resulting template can be used to replace the current template in
+the auxilliary stack. It will add alarms and notifications.
