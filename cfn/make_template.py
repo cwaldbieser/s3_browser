@@ -333,7 +333,7 @@ def create_resources(t, config, params, bootstrap=False):
     make_s3_upload_policy(t, config, assumed_role)
     make_s3_download_policy(t, config, assumed_role)
     make_lambda_exec_policy(t, config, role)
-    if bootstrap:
+    if not bootstrap:
         alarm_topic = create_sns_topic(t, config, "s3browser_alarms_topic")
         create_log_alarms(t, config, alarm_topic)
 
