@@ -72,6 +72,7 @@ def __browse_GET(subpath):
     return render_template(
         "browse.jinja2",
         appconfig_version=appconfig_version,
+        friendly_bucket=os.environ.get("FRIENDLY_BUCKET"),
         bucket_name=bucket_name,
         bucket_objects=objects,
         path_components=path_components,

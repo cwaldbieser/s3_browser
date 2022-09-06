@@ -1,6 +1,6 @@
 {% extends "base.jinja2" %}
 {% block content %}
-    <h1>Browsing S3 Bucket <span id="bucket" data-bucket="{{ bucket_name }}">{{ bucket_name }}</span></h1>
+    <h1>Browsing S3 Bucket <span id="bucket" data-bucket="{{ bucket_name }}">{{ friendly_bucket or bucket_name }}</span></h1>
             <div>
         <h3>Path: {% for component, path in path_components %}{% if loop.last %}{{ component }}{% else %}<a href="{{ url_for("browse", subpath=path) }}">{{component}}</a>{% endif %}/{% endfor %}</h3>
                 <div>
