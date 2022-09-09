@@ -14,13 +14,15 @@ def create_content_security_policy():
         "script-src": [
             "'self'",
             "'unsafe-eval'",
-            "code.jquery.com",
-            "cdnjs.cloudflare.com",
-            "maxcdn.bootstrapcdn.com",
+            "cdn.datatables.net",
             "cdn.jsdelivr.net",
+            "cdnjs.cloudflare.com",
+            "code.jquery.com",
+            "maxcdn.bootstrapcdn.com",
         ],
         "style-src": [
             "'self'",
+            "cdn.datatables.net",
             "maxcdn.bootstrapcdn.com",
             "use.fontawesome.com",
         ],
