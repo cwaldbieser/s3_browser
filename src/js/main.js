@@ -192,13 +192,19 @@ function setEventHandlers() {
 
 export function setFileEventHandlers() {
   var bucketName = $("#bucket").data("bucket");
-  $("a[data-btnType='download']").click(async function(){
+  $("a[data-btnType='download']").off("click").click(async function(){
     var key = $( this ).data("key");
     await downloadFromS3(bucketName, key, credentials);
+  }).each(function(){
+    var key = $( this ).data("key");
+    console.log("Set download button event handler for key: " + key);
   });
-  $("a[data-btnType='delete']").click(async function(){
+  $("a[data-btnType='delete']").off("click").click(async function(){
     var key = $( this ).data("key");
     await deleteFromS3(key);
+  }).each(function(){
+    var key = $( this ).data("key");
+    console.log("Set delete button event handler for key: " + key);
   });
 }
 
