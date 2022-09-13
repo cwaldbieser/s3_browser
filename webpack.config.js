@@ -6,7 +6,8 @@ module.exports = {
   // Specify the output file containing our bundled code.
   output: {
     path: __dirname,
-    filename: 'static/bundle.js'
+    filename: 'static/bundle.js',
+    library: "S3BLibrary",
   },
    // Enable WebPack to use the 'path' package.
    resolve:{

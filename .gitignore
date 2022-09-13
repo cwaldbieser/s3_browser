@@ -1,5 +1,6 @@
 
 dev-env.sh
+dev-env.*.sh
 dev-identity.json
 node_modules/
 static/bundle.js

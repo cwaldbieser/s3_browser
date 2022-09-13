@@ -181,21 +181,27 @@ async function createFolder(){
 
 function setEventHandlers() {
   var bucketName = $("#bucket").data("bucket");
+  $("#upload-button").click(function(){
+    uploadFileHandler(bucketName);
+  });
+  $("#create-folder").click(async function(){
+    await createFolder();
+  });
+  setFileEventHandlers();
+}
+
+export function setFileEventHandlers() {
+  var bucketName = $("#bucket").data("bucket");
   $("a[data-btnType='download']").click(async function(){
     var key = $( this ).data("key");
     await downloadFromS3(bucketName, key, credentials);
-  });
-  $("#upload-button").click(function(){
-    uploadFileHandler(bucketName);
   });
   $("a[data-btnType='delete']").click(async function(){
     var key = $( this ).data("key");
     await deleteFromS3(key);
   });
-  $("#create-folder").click(async function(){
-    await createFolder();
-  });
 }
+
 $(document).ready(function(){
   configureApp();
   streamSaver.mitm = window.mitm;
