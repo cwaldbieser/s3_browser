@@ -51,7 +51,7 @@ Run the `make_template.py` script to generate the CloudFormation template.
 
 .. code::sh
 
-   $ ./make_template.py --bootstrap cfn/$CONFIG_FILE | tee /tmp/template.yml
+   $ ./make_template.py --bootstrap configs/$CONFIG_FILE | tee /tmp/template.yml
 
 The resulting template can be used to deploy a stack in CloudFormation.
 
