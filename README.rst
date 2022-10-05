@@ -65,6 +65,8 @@ Update zappa_settings.json
 - edit other settings as appropriate.
 - set CAS_SERVICE_URL to "https://www.example.net/login", this will need to be
   updated after initial deployment.
+- optionally set environment variable `FRIENDLY_BUCKET` to a friendly bucket
+  name.
 - edit role and policy ARNs with resources created in previous section.
     - S3_ROLE_ARN - use the S3AssumedRole
     - DOWNLOAD_POLICY_ARN - use the S3DownloadPolicy
@@ -76,7 +78,7 @@ Deploy Zappa App
 
 .. code::sh
 
-   $ zappa deploy stage
+   $ zappa deploy $STAGE
 
 Update Zappa App
 """"""""""""""""
@@ -89,7 +91,7 @@ Then:
 
 .. code::sh
 
-   $ zappa update stage
+   $ zappa update $STAGE
 
 This sets the correct callback URL for CAS authentication.
 
@@ -100,7 +102,7 @@ Run the `make_template.py` script to generate the CloudFormation template.
 
 .. code::sh
 
-   $ ./make_template.py cfn/$CONFIG_FILE | tee /tmp/template.yml
+   $ ./make_template.py configs/$CONFIG_FILE | tee /tmp/template.yml
 
 The resulting template can be used to replace the current template in the
 auxilliary stack.  It will add alarms and notifications.
