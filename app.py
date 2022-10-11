@@ -88,7 +88,6 @@ def __browse_GET(subpath):
 
 
 def __browse_DELETE(subpath):
-    subpath = unquote_plus(subpath)
     logger.debug("__browse_DELETE; subpath: `{}`".format(subpath))
     allow_remove_file = has_permission(remove_file)
     allow_remove_folder = has_permission(remove_folder)
