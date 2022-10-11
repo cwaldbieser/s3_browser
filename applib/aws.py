@@ -33,7 +33,6 @@ def get_aws_credentials():
             DurationSeconds=900,  # Minimum duration
             PolicyArns=policy_arns,
         )
-        logger.debug(response)
         credentials = response["Credentials"]
         access_key_id = credentials["AccessKeyId"]
         secret_access_key = credentials["SecretAccessKey"]
