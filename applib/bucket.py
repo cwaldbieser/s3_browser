@@ -1,4 +1,5 @@
 import os
+from urllib.parse import unquote_plus
 
 import boto3
 from logzero import logger
@@ -50,7 +51,7 @@ def list_bucket_objects(path):
     contents = response.get("Contents", [])
     bucket_path_len = len(bucket_path)
     for item in contents:
-        key = item["Key"][bucket_path_len:]
+        key = unquote_plus(item["Key"][bucket_path_len:])
         if key == "":
             continue
         last_modified = item["LastModified"]
