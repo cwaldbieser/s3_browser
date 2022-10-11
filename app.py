@@ -2,6 +2,7 @@
 
 import os
 import uuid
+from urllib.parse import unquote_plus
 
 from flask import (Flask, Response, make_response, redirect, render_template,
                    request, session, url_for)
@@ -87,7 +88,8 @@ def __browse_GET(subpath):
 
 
 def __browse_DELETE(subpath):
-    # bucket_name = os.environ.get("S3_BUCKET")
+    subpath = unquote_plus(subpath)
+    logger.debug("__browse_DELETE; subpath: `{}`".format(subpath))
     allow_remove_file = has_permission(remove_file)
     allow_remove_folder = has_permission(remove_folder)
     if not (allow_remove_file or allow_remove_folder):
