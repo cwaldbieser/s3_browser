@@ -27,7 +27,7 @@ Deployment
 
 A long string of high entropy characters. An easy way to generate it:
 
-``` {.sourceCode .python}
+``` {.python}
 > import secrets
 > secrets.token_hex()
 ```
@@ -36,32 +36,53 @@ A long string of high entropy characters. An easy way to generate it:
 
 \$CONFIG\_FILE is the name of your config file in TOML format.
 
--   Change folders into the cfn folder.
--   Edit the cfn/\$CONFIG\_FILE.
--   Edit the secrets.app\_secret ARN with the ARN of the secret from the
-    previous section.
--   Edit the s3.bucket\_arn setting with the ARN of the target S3
-    bucket.
--   Edit any logging settings as appropriate.
+-   Change folders into the [cfn]{.title-ref} folder.
+-   Edit the [cfn/\$CONFIG\_FILE]{.title-ref}.
+-   Edit [application]{.title-ref} -\> [project]{.title-ref} and
+    [application]{.title-ref} -\> [stack description]{.title-ref}.
+-   Edit the [secrets.app\_secret]{.title-ref} ARN with the ARN of the
+    secret from the previous section.
+-   Edit the [s3.bucket\_arn]{.title-ref} setting with the ARN of the
+    target S3 bucket.
+-   Edit any logging settings as appropriate. The log group won\'t exist
+    before you deploy with Zappa.
+-   Update the [alarm\_description]{.title-ref}.
 
-Run the make\_template.py script to generate the CloudFormation
-template.
+Run the [make\_template.py]{.title-ref} script to generate the
+CloudFormation template.
 
-``` {.sourceCode .sh}
-$ ./make_template.py --bootstrap cfn/$CONFIG_FILE | tee /tmp/template.yml
+``` {.sh}
+$ ./make_template.py --bootstrap configs/$CONFIG_FILE | tee /tmp/template.yml
 ```
 
 The resulting template can be used to deploy a stack in CloudFormation.
 
 ### Update zappa\_settings.json
 
--   alter stage name (e.g. "dev" -&gt; "stage").
+-   alter stage name (e.g. \"dev\" -\> \"stage\").
+
 -   edit APP\_SECRET with secret name (not full ARN).
+
+-   edit the CAS\_LOGIN\_URL, CAS\_LOGOUT\_URL, and
+    CAS\_SERVICE\_VALIDATE\_URL.
+
+-   edit the S3BROWSER\_ENTITLEMENT\_PREFIX.
+
 -   edit S3\_BUCKET with bucket name (not full ARN).
--   s3\_bucket setting must be the name of a code deploy bucket.
+
+-   [s3\_bucket]{.title-ref} setting must be the name of a code deploy
+    bucket.
+
 -   edit other settings as appropriate.
--   set CAS\_SERVICE\_URL to "<https://www.example.net/login>", this
+
+-   set CAS\_SERVICE\_URL to \"<https://www.example.net/login>\", this
     will need to be updated after initial deployment.
+
+-   update the [project\_name]{.title-ref}.
+
+-   optionally set environment variable [FRIENDLY\_BUCKET]{.title-ref}
+    to a friendly bucket name.
+
 -   
 
     edit role and policy ARNs with resources created in previous section.
@@ -73,31 +94,32 @@ The resulting template can be used to deploy a stack in CloudFormation.
 
 ### Deploy Zappa App
 
-``` {.sourceCode .sh}
-$ zappa deploy stage
+``` {.sh}
+$ zappa deploy $STAGE
 ```
 
 ### Update Zappa App
 
 Using the URL produced during the previous step, update the
-"CAS\_SERVICE\_URL" to be the base URL plus the "login" resource. E.g.
-"<https://$SOME_RANDOM_CHARS.execute-api.$REGION_CODE.amazonaws.com/stage/login>"
+\"CAS\_SERVICE\_URL\" to be the base URL plus the \"login\" resource.
+E.g.
+\"<https://$SOME_RANDOM_CHARS.execute-api.$REGION_CODE.amazonaws.com/stage/login>\"
 
 Then:
 
-``` {.sourceCode .sh}
-$ zappa update stage
+``` {.sh}
+$ zappa update $STAGE
 ```
 
 This sets the correct callback URL for CAS authentication.
 
 ### Update Auxilliary Templates
 
-Run the make\_template.py script to generate the CloudFormation
-template.
+Run the [make\_template.py]{.title-ref} script to generate the
+CloudFormation template.
 
-``` {.sourceCode .sh}
-$ ./make_template.py cfn/$CONFIG_FILE | tee /tmp/template.yml
+``` {.sh}
+$ ./make_template.py configs/$CONFIG_FILE | tee /tmp/template.yml
 ```
 
 The resulting template can be used to replace the current template in
@@ -108,7 +130,7 @@ Target S3 Bucket CORS
 
 CORS must be configured on the target bucket:
 
-``` {.sourceCode .json}
+``` {.json}
 [
     {
         "AllowedHeaders": [
