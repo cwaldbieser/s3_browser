@@ -52,6 +52,7 @@ def authorize():
                 )
                 return render_template("403.jinja2"), 403
             return f(*args, **kwargs)
+
         return decorated_function
 
     return decorator

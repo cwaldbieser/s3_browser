@@ -82,7 +82,7 @@ def files_in_folder(folder):
     client = boto3.client("s3")
     resp = client.list_objects_v2(
         Bucket=bucket_name,
-        Delimiter='/',
+        Delimiter="/",
         MaxKeys=2,
         Prefix=folder,
     )

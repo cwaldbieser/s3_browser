@@ -1,11 +1,11 @@
 import logging
 import os
 
+import boto3
 from flask_talisman import Talisman
 from logzero import logger
 
 from applib.websecurity import create_content_security_policy
-import boto3
 
 
 def is_dev_env():
@@ -55,6 +55,7 @@ def make_path_components(subpath):
     parts = subpath.split("/")
     for n in range(len(parts)):
         component = parts[n]
-        full_path = "/".join(parts[:n+1])
+        pos = n + 1
+        full_path = "/".join(parts[:pos])
         path_components.append((component, full_path))
     return path_components
