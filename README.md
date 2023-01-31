@@ -103,7 +103,7 @@ $ zappa deploy $STAGE
 Using the URL produced during the previous step, update the
 \"CAS\_SERVICE\_URL\" to be the base URL plus the \"login\" resource.
 E.g.
-\"<https://$SOME_RANDOM_CHARS.execute-api.$REGION_CODE.amazonaws.com/stage/login>\"
+\"<https://$SOME_RANDOM_CHARS.execute-api.$REGION_CODE.amazonaws.com/$STAGE/login>\"
 
 Then:
 
