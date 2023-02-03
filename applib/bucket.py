@@ -58,7 +58,7 @@ def list_bucket_objects(path):
         size = item["Size"]
         item = {"key": key, "last_modified": last_modified.isoformat(), "size": size}
         if key.endswith("/"):
-            folders.add(item)
+            folders.add(key)
         elif "/" in key:
             parts = key.split("/")
             folders.add("{}/".format(parts[0]))
@@ -69,6 +69,7 @@ def list_bucket_objects(path):
             files.append(item)
     folders = list(folders)
     folders.sort()
+    folders = [{"key": k, "last_modified": "", "size": 0} for k in folders]
     objects["folders"] = folders
     logger.info(objects)
     return objects
