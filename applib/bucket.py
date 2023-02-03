@@ -40,7 +40,7 @@ def list_bucket_objects(path):
     assert bucket_name, Exception(message)
     bucket_path = resource_to_bucket_path(path)
     files = []
-    folders = []
+    folders = set([])
     objects = {"files": files, "folders": folders}
     client = boto3.client("s3")
     response = client.list_objects_v2(
@@ -58,11 +58,17 @@ def list_bucket_objects(path):
         size = item["Size"]
         item = {"key": key, "last_modified": last_modified.isoformat(), "size": size}
         if key.endswith("/"):
-            folders.append(item)
+            folders.add(item)
         elif "/" in key:
+            parts = key.split("/")
+            folders.add("{}/".format(parts[0]))
             # skip files in subfolders.
+            # Only include their topmost folder part.
             continue
         else:
             files.append(item)
+    folders = list(folders)
+    folders.sort()
+    objects["folders"] = folders
     logger.info(objects)
     return objects
