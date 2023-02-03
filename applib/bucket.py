@@ -50,18 +50,25 @@ def list_bucket_objects(path):
     )
     contents = response.get("Contents", [])
     bucket_path_len = len(bucket_path)
+    logger.debug(f"bucket_path: `{bucket_path}`")
     for item in contents:
         key = unquote_plus(item["Key"][bucket_path_len:])
+        logger.debug(f"Found key `{key}`.")
         if key == "":
             continue
         last_modified = item["LastModified"]
         size = item["Size"]
         item = {"key": key, "last_modified": last_modified.isoformat(), "size": size}
         if key.endswith("/"):
+            logger.debug(f"Key `{key}` is a folder.")
             folders.add(key)
         elif "/" in key:
             parts = key.split("/")
             folders.add("{}/".format(parts[0]))
+            logger.debug(
+                f"Key `{key}` is a file with embedded folders."
+                f"  Adding folder `{parts[0]}`."
+            )
             # skip files in subfolders.
             # Only include their topmost folder part.
             continue
