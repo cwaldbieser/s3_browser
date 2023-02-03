@@ -28,7 +28,7 @@
                       <tbody>
                         {% for item in bucket_objects.folders %}
                         <tr>
-                        <td><a href="{{ subpath }}/{{ item.key}}">{{ item.key }}</a></td>
+                        <td><a href="{{ url_for("browse", subpath="") }}/{{ subpath }}/{{ item.key}}">{{ item.key }}</a></td>
                           <td>{{ item.size }}</td>
                           <td>{{ item.last_modified }}</td>
                           <td>
