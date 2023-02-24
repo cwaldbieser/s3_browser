@@ -6,3 +6,4 @@ node_modules/
 static/bundle.js
 static/bundle.js.LICENSE.txt
 *.pyc
+.pyinit

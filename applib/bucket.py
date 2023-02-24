@@ -60,8 +60,11 @@ def list_bucket_objects(path):
         size = item["Size"]
         item = {"key": key, "last_modified": last_modified.isoformat(), "size": size}
         if key.endswith("/"):
-            logger.debug(f"Key `{key}` is a folder.")
-            folders.add(key)
+            if "/" in key[:-1]:
+                logger.debug(f"Key `{key}` is a folder with one or more subfolders.")
+            else:
+                logger.debug(f"Key `{key}` is a folder.")
+                folders.add(key)
         elif "/" in key:
             parts = key.split("/")
             folders.add("{}/".format(parts[0]))
