@@ -8,5 +8,6 @@ $(document).ready(function(){
   }).on("length.dt", function () {
     window.setTimeout(S3BLibrary.setFileEventHandlers, 500);
   });
+  $("#foldersTable").DataTable();
 });
 
