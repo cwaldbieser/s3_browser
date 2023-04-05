@@ -19,7 +19,7 @@ Deployment
 
 - Create a secret in the target account for the application secret.
 - Deploy auxilliary templates.
-- Update zappa_settings.json.
+- Update ``zappa_settings.json``.
 - Deploy zappa app.
 - Update zappa app.
 - update auxilliary templates.
@@ -38,18 +38,18 @@ An easy way to generate it:
 Deploy Auxilliary Templates
 """""""""""""""""""""""""""
 
-$CONFIG_FILE is the name of your config file in TOML format.
+``$CONFIG_FILE`` is the name of your config file in TOML format.
 
-- Change folders into the `cfn` folder.
-- Edit the `cfn/$CONFIG_FILE`.
-- Edit `application` -> `project` and `application` -> `stack description`.
-- Edit the `secrets.app_secret` ARN with the ARN of the secret from the
+- Change folders into the ``cfn`` folder.
+- Edit the ``cfn/$CONFIG_FILE``.
+- Edit ``application`` → ``project`` and ``application`` → ``stack description``.
+- Edit the ``secrets.app_secret`` ARN with the ARN of the secret from the
   previous section.
-- Edit the `s3.bucket_arn` setting with the ARN of the target S3 bucket.
+- Edit the ``s3.bucket_arn`` setting with the ARN of the target S3 bucket.
 - Edit any logging settings as appropriate.  The log group won't exist before you deploy with Zappa.
-- Update the `alarm_description`.
+- Update the ``alarm_description``.
 
-Run the `make_template.py` script to generate the CloudFormation template.
+Run the ``make_template.py`` script to generate the CloudFormation template.
 
 .. code::sh
 
@@ -57,26 +57,26 @@ Run the `make_template.py` script to generate the CloudFormation template.
 
 The resulting template can be used to deploy a stack in CloudFormation.
 
-Update zappa_settings.json
-""""""""""""""""""""""""""
+Update ``zappa_settings.json``
+""""""""""""""""""""""""""""""
 
-- alter stage name (e.g. "dev" -> "stage").
+- alter stage name (e.g. ``dev`` → ``stage``).
 - edit APP_SECRET with secret name (not full ARN).
-- edit the CAS_LOGIN_URL, CAS_LOGOUT_URL, and CAS_SERVICE_VALIDATE_URL.
-- edit the S3BROWSER_ENTITLEMENT_PREFIX.
-- edit S3_BUCKET with bucket name (not full ARN).
-- `s3_bucket` setting must be the name of a code deploy bucket.
+- edit the ``CAS_LOGIN_URL``, ``CAS_LOGOUT_URL``, and ``CAS_SERVICE_VALIDATE_URL``.
+- edit the ``S3BROWSER_ENTITLEMENT_PREFIX``.
+- edit ``S3_BUCKET`` with bucket name (not full ARN).
+- ``s3_bucket`` setting must be the name of a code deploy bucket.
 - edit other settings as appropriate.
-- set CAS_SERVICE_URL to "https://www.example.net/login", this will need to be
+- set ``CAS_SERVICE_URL`` to https://www.example.net/login, this will need to be
   updated after initial deployment.
-- update the `project_name`.
-- optionally set environment variable `FRIENDLY_BUCKET` to a friendly bucket
+- update the ``project_name``.
+- optionally set environment variable ``FRIENDLY_BUCKET`` to a friendly bucket
   name.
-- edit role and policy ARNs with resources created in previous section.
-    - S3_ROLE_ARN - use the S3AssumedRole
-    - DOWNLOAD_POLICY_ARN - use the S3DownloadPolicy
-    - UPLOAD_POLICY_ARN - use the S3UploadPolicy
-    - role_arn - Use the LambdaExecRole
+- edit role and policy ARNs with resources created in previous section:
+  - ``S3_ROLE_ARN`` - use the S3AssumedRole
+  - ``DOWNLOAD_POLICY_ARN`` - use the S3DownloadPolicy
+  - ``UPLOAD_POLICY_ARN`` - use the S3UploadPolicy
+  - ``role_arn`` - Use the LambdaExecRole
 
 Deploy Zappa App
 """"""""""""""""
@@ -88,9 +88,9 @@ Deploy Zappa App
 Update Zappa App
 """"""""""""""""
 
-Using the URL produced during the previous step, update the "CAS_SERVICE_URL"
-to be the base URL plus the "login" resource.  E.g.
-"https://$SOME_RANDOM_CHARS.execute-api.$REGION_CODE.amazonaws.com/$STAGE/login"
+Using the URL produced during the previous step, update the ``CAS_SERVICE_URL``
+to be the base URL plus the ``login`` resource.  E.g.
+https://$SOME_RANDOM_CHARS.execute-api.$REGION_CODE.amazonaws.com/$STAGE/login
 
 Then:
 
