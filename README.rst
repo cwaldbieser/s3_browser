@@ -103,7 +103,7 @@ This sets the correct callback URL for CAS authentication.
 Update Auxilliary Templates
 """""""""""""""""""""""""""
 
-Run the `make_template.py` script to generate the CloudFormation template.
+Run the ``make_template.py`` script to generate the CloudFormation template.
 
 .. code::sh
 
