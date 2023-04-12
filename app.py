@@ -4,7 +4,7 @@ import os
 import uuid
 
 from flask import (Flask, Response, make_response, redirect, render_template,
-                   request, session, url_for)
+                   request, send_from_directory, session, url_for)
 from flask_wtf.csrf import CSRFProtect
 from logzero import logger
 
@@ -30,6 +30,11 @@ csrf = CSRFProtect(app)
 def index():
     logger.debug("Redirecting to `/browse` ...")
     return redirect(url_for("browse", subpath="top"))
+
+
+@app.route("/robots.txt")
+def static_from_root():
+    return send_from_directory(app.static_folder, request.path[1:])
 
 
 @app.route("/css/app.css")
