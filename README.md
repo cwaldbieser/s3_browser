@@ -60,7 +60,7 @@ The resulting template can be used to deploy a stack in CloudFormation.
 ### Update `zappa_settings.json`
 
 -   alter stage name (e.g. `dev` → `stage`).
--   edit APP\_SECRET with secret name (not full ARN).
+-   edit `APP_SECRET` with secret name (not full ARN).
 -   edit the `CAS_LOGIN_URL`, `CAS_LOGOUT_URL`, and
     `CAS_SERVICE_VALIDATE_URL`.
 -   edit the `S3BROWSER_ENTITLEMENT_PREFIX`.
