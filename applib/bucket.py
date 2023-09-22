@@ -31,6 +31,25 @@ def resource_to_bucket_path(path, force_endslash=True):
     return bucket_path
 
 
+def list_all_bucket_objects(bucket_name, prefix):
+    """
+    Generate a sequence of bucket info objects.
+    """
+    truncated = False
+    kwargs = {}
+    client = boto3.client("s3")
+    while not truncated:
+        response = client.list_objects_v2(
+            Bucket=bucket_name, EncodingType="url", Prefix=prefix, **kwargs
+        )
+        contents = response.get("Contents", [])
+        for item in contents:
+            yield item
+        truncated = response["IsTruncated"]
+        if truncated:
+            kwargs["ContinuationToken"] = response["NextContinuationToken"]
+
+
 def list_bucket_objects(path):
     """
     List the bucket objects at `path`.
@@ -42,16 +61,9 @@ def list_bucket_objects(path):
     files = []
     folders = set([])
     objects = {"files": files, "folders": folders}
-    client = boto3.client("s3")
-    response = client.list_objects_v2(
-        Bucket=bucket_name,
-        EncodingType="url",
-        Prefix=bucket_path,
-    )
-    contents = response.get("Contents", [])
     bucket_path_len = len(bucket_path)
     logger.debug(f"bucket_path: `{bucket_path}`")
-    for item in contents:
+    for item in list_all_bucket_objects(bucket_name, bucket_path):
         key = unquote_plus(item["Key"][bucket_path_len:])
         logger.debug(f"Found key `{key}`.")
         if key == "":
