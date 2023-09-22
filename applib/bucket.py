@@ -35,13 +35,15 @@ def list_all_bucket_objects(bucket_name, prefix):
     """
     Generate a sequence of bucket info objects.
     """
-    truncated = False
+    truncated = True
     kwargs = {}
     client = boto3.client("s3")
-    while not truncated:
+    while truncated:
         response = client.list_objects_v2(
             Bucket=bucket_name, EncodingType="url", Prefix=prefix, **kwargs
         )
+        key_count = response["KeyCount"]
+        logger.debug(f"Keys returned in this page: {key_count}")
         contents = response.get("Contents", [])
         for item in contents:
             yield item
