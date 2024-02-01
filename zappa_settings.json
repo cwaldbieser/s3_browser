@@ -33,7 +33,7 @@
         "project_name": "s3-browser",
         "manage_roles": false,
         "role_arn": "arn:aws:iam::776837491846:role/s3browser-LambdaExecRole-6LSGL6U8WGL7",
-        "runtime": "python3.9",
+        "runtime": "python3.11",
         "s3_bucket": "zappa-835a617a7",
         "callbacks": {
             "post": "applib.deploy_utils.on_update"
