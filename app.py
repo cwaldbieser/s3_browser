@@ -14,10 +14,24 @@ from applib.aws import (create_bucket_folder, delete_file_from_bucket,
                         delete_folder_from_bucket, get_aws_credentials)
 from applib.bucket import list_bucket_objects, resource_to_bucket_path
 # Performs authentication; maps attributes to normalized ID token.
-from applib.cas import authenticate, sso_logout
+from applib.cas import authenticate as cas_authenticate
+from applib.cas import sso_logout as cas_sso_logout
+from applib.oidc import authenticate as oidc_authenticate
+from applib.oidc import sso_logout as oidc_sso_logout
 from applib.permissions import (create_folder, download_file, has_permission,
                                 remove_file, remove_folder, upload_file)
 from applib.utils import init_flask_app, make_path_components
+
+sso_method = os.environ.get("SSO_METHOD", "cas")
+
+if sso_method == "cas":
+    authenticate = cas_authenticate
+    sso_logout = cas_sso_logout
+elif sso_method == "oidc":
+    authenticate = oidc_authenticate
+    sso_logout = oidc_sso_logout
+else:
+    raise NotImplementedError(f"SSO method '{sso_method}' is not implemented.")
 
 app = Flask(__name__)
 
