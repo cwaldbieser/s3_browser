@@ -60,7 +60,8 @@ def sso_logout():
     """
     SSO logout
     """
-    oidc_logout_url = os.environ.get("OIDC_LOGOUT_URL")
+    oidc_metadata = get_oidc_metadata()
+    oidc_logout_url = oidc_metadata.get("end_session_endpoint")
     if oidc_logout_url is not None:
         return redirect(oidc_logout_url)
     return redirect(url_for("index"))
