@@ -6,6 +6,7 @@ import requests
 from flask import abort, redirect, request, session, url_for
 
 from applib.permissions import get_default_permissions
+from applib.utils import get_secret_string
 
 
 def authenticate():
@@ -93,11 +94,13 @@ def exchange_code_for_id_token(code):
     oidc_metadata = get_oidc_metadata()
     token_endpoint = oidc_metadata["token_endpoint"]
     client_id = os.environ["OIDC_CLIENT_ID"]
+    client_secret = get_client_secret()
     data = {
         "grant_type": "authorization_code",
         "code": code,
         "redirect_uri": redirect_uri,
         "client_id": client_id,
+        "client_secret": client_secret,
     }
     headers = {"Content-Type": "application/x-www-form-urlencoded"}
     response = requests.post(token_endpoint, headers=headers, data=data)
@@ -123,3 +126,18 @@ def _get_oidc_metadata(tstamp):
     response = requests.get(metadata_url)
     metadata = response.json()
     return metadata
+
+
+def get_client_secret():
+    """
+    Retrieve client secret.
+    """
+    tstamp = (int(datetime.datetime.today().timestamp()) // 600) * 600
+    return _get_client_secret(tstamp)
+
+
+@lru_cache(maxsize=10)
+def _get_client_secret(tstamp):
+    secret_name = os.environ["OIDC_CLIENT_SECRET_ARN"]
+    secret = get_secret_string(secret_name)
+    return secret
