@@ -36,7 +36,7 @@
         "manage_roles": false,
         "project_name": "s3-browser",
         "role_arn": "arn:aws:iam::776837491846:role/s3browser-LambdaExecRole-6LSGL6U8WGL7",
-        "runtime": "python3.13",
+        "runtime": "python3.14",
         "s3_bucket": "zappa-835a617a7"
     }
 }
