@@ -12,6 +12,7 @@ flask-talisman = "*"
 logzero = "*"
 lxml = "*"
 requests = "*"
+pyjwt = {extras = ["crypto"], version = "*"}
 
 [dev-packages]
 troposphere = "*"

@@ -1,9 +1,12 @@
 import datetime
+import json
 import os
 from functools import lru_cache
 
+import jwt
 import requests
 from flask import abort, redirect, request, session, url_for
+from logzero import logger
 
 from applib.permissions import get_default_permissions
 from applib.utils import get_secret_string
@@ -30,11 +33,12 @@ def authenticate():
     """
     code = request.args.get("code", None)
     if code is None:
-        get_authorization_code()
+        return get_authorization_code()
     else:
         id_token = exchange_code_for_id_token(code)
         if id_token is None:
             abort(401)
+        logger.info(json.dumps(id_token))
         user = id_token["preferred_username"].split("@")[0]
         identity = {
             "sub": user,
@@ -49,6 +53,7 @@ def authenticate():
             value = str2bool(id_token.get(permission, "0"))
             new_permissions[permission] = value
         identity["permissions"] = new_permissions
+        return redirect(url_for("browse", subpath="top"))
 
 
 def sso_logout():
@@ -105,7 +110,30 @@ def exchange_code_for_id_token(code):
     headers = {"Content-Type": "application/x-www-form-urlencoded"}
     response = requests.post(token_endpoint, headers=headers, data=data)
     result = response.json()
-    id_token = result.get("id_token")
+    encoded_id_token = result.get("id_token")
+    header = jwt.get_unverified_header(encoded_id_token)
+    kid = header.get("kid")
+    jwks = get_jwks()
+    signing_key = jwt.PyJWKClient.match_kid(jwks, kid)
+    if not signing_key:
+        logger.warning("Signing key not found.")
+        return None
+    issuer_url = oidc_metadata["issuer"]
+    try:
+        id_token = jwt.decode(
+            encoded_id_token,
+            key=signing_key.key,
+            algorithms=["RS256"],
+            audience=client_id,
+            issuer=issuer_url,
+        )
+    except jwt.ExpiredSignatureError:
+        logger.warning("JWT is expired.")
+        return None
+    except jwt.InvalidTokenError as e:
+        logger.warn("JWT validation failed.")
+        logger.exception(e)
+        return None
     return id_token
 
 
@@ -141,3 +169,24 @@ def _get_client_secret(tstamp):
     secret_name = os.environ["OIDC_CLIENT_SECRET_ARN"]
     secret = get_secret_string(secret_name)
     return secret
+
+
+def get_jwks():
+    """
+    Retrieve JWKS (JSON Web Keys).
+    """
+    tstamp = (int(datetime.datetime.today().timestamp()) // 600) * 600
+    return _get_jwks(tstamp)
+
+
+@lru_cache(maxsize=10)
+def _get_jwks(tstamp):
+    """
+    Cached implementation of fetching JWKS.
+    """
+    metadata = get_oidc_metadata()
+    jwks_uri = metadata["jwks_uri"]
+    response = requests.get(jwks_uri)
+    result = response.json()
+    jwks = jwt.PyJWKSet.from_dict(result)
+    return jwks
