@@ -157,7 +157,7 @@ def get_aws_web_identity_token():
     Get a web identity token for proving this client is the one authenticating
     the user to Entra ID.
     """
-    audience = os.env["OIDC_WIF_AUDIENCE"]
+    audience = os.environ["OIDC_WIF_AUDIENCE"]
     sts_client = boto3.client("sts", region_name="us-east-1")
     response = sts_client.get_web_identity_token(
         Audience=[audience],
