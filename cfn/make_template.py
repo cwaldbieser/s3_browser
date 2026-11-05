@@ -197,6 +197,13 @@ def make_lambda_exec_policy(t, config, role):
                 Statement(
                     Effect=Allow,
                     Action=[
+                        Action("sts", "GetWebIdentityToken"),
+                    ],
+                    Resource=["*"],
+                ),
+                Statement(
+                    Effect=Allow,
+                    Action=[
                         Action("logs", "CreateLogGroup"),
                         Action("logs", "CreateLogStream"),
                         Action("logs", "PutLogEvents"),

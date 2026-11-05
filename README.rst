@@ -113,7 +113,7 @@ The resulting template can be used to replace the current template in the
 auxilliary stack.  It will add alarms and notifications.
 
 Target S3 Bucket CORS
-=====================
+---------------------
 
 CORS must be configured on the target bucket:
 
@@ -134,3 +134,26 @@ CORS must be configured on the target bucket:
             "ExposeHeaders": []
         }
     ]
+
+OIDC web identity federation
+----------------------------
+
+OIDC requirements
+-----------------
+
+OIDC authentication can be configured using various `OIDC_*` enviroment variables.
+If you want to use web identity federation instead of a shared client secret, you must
+set the env var `OIDC_USE_WEB_IDENTITY_FEDERATION` to "1" and `OIDC_WIF_AUDIENCE` to
+the audience the produced token will be for.  For example, for Entra ID this is typically
+"api://AzureADTokenExchange".
+
+You must also enable outbound web identity federation for the AWS account:
+
+.. code:: bash
+
+   $ aws iam enable-outbound-web-identity-federation
+   $ # You can read back the issuer URL with the next command.
+   $ aws iam get-outbound-web-identity-federation-info --query "IssuerIdentifier" --output text
+
+You Entra ID application will need to be configured with a federated identity rather than a shared
+secret.  The issuer, subject, and audience will be typical inputs for that configuration.
