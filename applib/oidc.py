@@ -3,6 +3,7 @@ import json
 import os
 from functools import lru_cache
 
+import boto3
 import jwt
 import requests
 from flask import abort, redirect, request, session, url_for
@@ -100,17 +101,30 @@ def exchange_code_for_id_token(code):
     oidc_metadata = get_oidc_metadata()
     token_endpoint = oidc_metadata["token_endpoint"]
     client_id = os.environ["OIDC_CLIENT_ID"]
-    client_secret = get_client_secret()
+    oidc_use_wif = str2bool(os.environ.get("OIDC_USE_WEB_IDENTITY_FEDERATION", "0"))
     data = {
         "grant_type": "authorization_code",
         "code": code,
         "redirect_uri": redirect_uri,
         "client_id": client_id,
-        "client_secret": client_secret,
     }
+    if oidc_use_wif:
+        web_identity_token = get_aws_web_identity_token()
+        data["client_assertion_type"] = (
+            "urn:ietf:params:oauth:client-assertion-type:jwt-bearer"
+        )
+        data["client_assertion"] = web_identity_token
+    else:
+        client_secret = get_client_secret()
+        data["client_secret"] = client_secret
     headers = {"Content-Type": "application/x-www-form-urlencoded"}
     response = requests.post(token_endpoint, headers=headers, data=data)
     result = response.json()
+    if response.status_code != 200:
+        logger.warning(
+            f"Failure when exchanging code for token: {json.dumps(result, indent=4)}"
+        )
+        return None
     encoded_id_token = result.get("id_token")
     header = jwt.get_unverified_header(encoded_id_token)
     kid = header.get("kid")
@@ -136,6 +150,22 @@ def exchange_code_for_id_token(code):
         logger.exception(e)
         return None
     return id_token
+
+
+def get_aws_web_identity_token():
+    """
+    Get a web identity token for proving this client is the one authenticating
+    the user to Entra ID.
+    """
+    audience = os.env["OIDC_WIF_AUDIENCE"]
+    sts_client = boto3.client("sts", region_name="us-east-1")
+    response = sts_client.get_web_identity_token(
+        Audience=[audience],
+        DurationSeconds=300,
+        SigningAlgorithm="RS256",
+    )
+
+    return response["WebIdentityToken"]
 
 
 def get_oidc_metadata():
