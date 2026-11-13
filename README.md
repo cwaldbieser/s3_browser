@@ -1,5 +1,6 @@
-S3 Browser
-==========
+---
+title: S3 Browser
+---
 
 A simple application for browsing and performing basic file operations
 on objects in an S3 bucket. Operations supported are:
@@ -14,7 +15,7 @@ on objects in an S3 bucket. Operations supported are:
 These permissions can be configured on a per-user basis.
 
 Deployment
-----------
+==========
 
 -   Create a secret in the target account for the application secret.
 -   Deploy auxilliary templates.
@@ -23,7 +24,8 @@ Deployment
 -   Update zappa app.
 -   update auxilliary templates.
 
-### Create Application Secret
+Create Application Secret
+-------------------------
 
 A long string of high entropy characters. An easy way to generate it:
 
@@ -32,7 +34,8 @@ A long string of high entropy characters. An easy way to generate it:
 > secrets.token_hex()
 ```
 
-### Deploy Auxilliary Templates
+Deploy Auxilliary Templates
+---------------------------
 
 `$CONFIG_FILE` is the name of your config file in TOML format.
 
@@ -57,7 +60,8 @@ $ ./make_template.py --bootstrap configs/$CONFIG_FILE | tee /tmp/template.yml
 
 The resulting template can be used to deploy a stack in CloudFormation.
 
-### Update `zappa_settings.json`
+Update `zappa_settings.json`
+----------------------------
 
 -   alter stage name (e.g. `dev` → `stage`).
 -   edit `APP_SECRET` with secret name (not full ARN).
@@ -79,13 +83,15 @@ The resulting template can be used to deploy a stack in CloudFormation.
     -   `UPLOAD_POLICY_ARN` - use the S3UploadPolicy
     -   `role_arn` - Use the LambdaExecRole
 
-### Deploy Zappa App
+Deploy Zappa App
+----------------
 
 ``` {.sh}
 $ zappa deploy $STAGE
 ```
 
-### Update Zappa App
+Update Zappa App
+----------------
 
 Using the URL produced during the previous step, update the
 `CAS_SERVICE_URL` to be the base URL plus the `login` resource. E.g.
@@ -99,7 +105,8 @@ $ zappa update $STAGE
 
 This sets the correct callback URL for CAS authentication.
 
-### Update Auxilliary Templates
+Update Auxilliary Templates
+---------------------------
 
 Run the `make_template.py` script to generate the CloudFormation
 template.
@@ -133,3 +140,39 @@ CORS must be configured on the target bucket:
     }
 ]
 ```
+
+OIDC
+====
+
+OIDC authentication can be configured using various **OIDC\_\***
+enviroment variables. If you want to use web identity federation instead
+of a shared client secret, you must set the env var
+**OIDC\_USE\_WEB\_IDENTITY\_FEDERATION** to \"1\" and
+**OIDC\_WIF\_AUDIENCE** to the audience the produced token will be for.
+For example, for Entra ID this is typically
+\"api://AzureADTokenExchange\".
+
+You must also enable outbound web identity federation for the AWS
+account:
+
+``` {.bash}
+$ aws iam enable-outbound-web-identity-federation
+$ # You can read back the issuer URL with the next command.
+$ aws iam get-outbound-web-identity-federation-info --query "IssuerIdentifier" --output text
+```
+
+You Entra ID application will need to be configured with a federated
+identity rather than a shared secret. The issuer, subject, and audience
+will be typical inputs for that configuration.
+
+The following environment variables should be set:
+
+-   **SSO\_METHOD**: \"oidc\"
+-   **OIDC\_CLIENT\_ID**: The OIDC client ID
+-   **OIDC\_METADATA\_URL**: The OIDC metadata URL
+-   **OIDC\_REDIRECT\_URI**: The URL ro redirect back to after
+    authentication at the IdP
+-   **OIDC\_USE\_WEB\_IDENTITY\_FEDERATION**: \"1\" \# 1=use
+    web-identity federation, 0=(default) use shared client secret
+-   **OIDC\_WIF\_AUDIENCE**: E.g. for Entra ID the default audience is
+    \"api://AzureADTokenExchange\"

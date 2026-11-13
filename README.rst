@@ -135,15 +135,12 @@ CORS must be configured on the target bucket:
         }
     ]
 
-OIDC web identity federation
-----------------------------
+OIDC
+----
 
-OIDC requirements
------------------
-
-OIDC authentication can be configured using various `OIDC_*` enviroment variables.
+OIDC authentication can be configured using various **OIDC_\*** enviroment variables.
 If you want to use web identity federation instead of a shared client secret, you must
-set the env var `OIDC_USE_WEB_IDENTITY_FEDERATION` to "1" and `OIDC_WIF_AUDIENCE` to
+set the env var **OIDC_USE_WEB_IDENTITY_FEDERATION** to "1" and **OIDC_WIF_AUDIENCE** to
 the audience the produced token will be for.  For example, for Entra ID this is typically
 "api://AzureADTokenExchange".
 
@@ -157,3 +154,13 @@ You must also enable outbound web identity federation for the AWS account:
 
 You Entra ID application will need to be configured with a federated identity rather than a shared
 secret.  The issuer, subject, and audience will be typical inputs for that configuration.
+
+The following environment variables should be set:
+
+- **SSO_METHOD**: "oidc"
+- **OIDC_CLIENT_ID**: The OIDC client ID
+- **OIDC_METADATA_URL**: The OIDC metadata URL
+- **OIDC_REDIRECT_URI**: The URL ro redirect back to after authentication at the IdP
+- **OIDC_USE_WEB_IDENTITY_FEDERATION**: "1"  # 1=use web-identity federation, 0=(default) use shared client secret
+- **OIDC_WIF_AUDIENCE**: E.g. for Entra ID the default audience is "api://AzureADTokenExchange"
+
